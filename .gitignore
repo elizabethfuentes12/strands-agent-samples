@@ -205,3 +205,22 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+
+strands/
+
+dependencies.zip
+
+_dependencies/
+node_modules
+node_modules/
+slack_events/
+tools/
+tools_creadas/
+repl_state/
+tools_creadas/
+notebook_test/

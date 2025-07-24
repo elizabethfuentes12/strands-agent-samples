@@ -1,0 +1,12 @@
+{"Records": [
+        {"eventVersion": "2.1", "eventSource": "aws:s3", "awsRegion": "us-east-2", "eventTime": "2025-06-25T21: 50: 03.703Z", "eventName": "ObjectCreated:Put", "userIdentity": {"principalId": "AWS:AROA4MTWLPU5BBRBNOQP3:eliaws"
+            }, "requestParameters": {"sourceIPAddress": "15.248.7.123"
+            }, "responseElements": {"x-amz-request-id": "N6EYDPXJ6AQDZGY2", "x-amz-id-2": "CWtWEpLnYtgaDGu4Jfv3lUb/gkyfq8V/ULuxDjPLuwo+0gEHTGQt6BFkg0eO1vgpt7HMiF0FVS5q1/pHoAv2AZSk8i5JohrBBuDQHlojFr0="
+            }, "s3": {"s3SchemaVersion": "1.0", "configurationId": "YWU0N2IxODItOWUzMi00ZGZmLWFkZDktOWU2ZGNmYjQwYWYw", "bucket": {"name": "myagentcdkstack-imagebucketba6ba0f5-5zlc8pw3w8yy", "ownerIdentity": {"principalId": "A2O5NWM06O4S9Y"
+                    }, "arn": "arn:aws:s3: : :myagentcdkstack-imagebucketba6ba0f5-5zlc8pw3w8yy"
+                }, "object": {"key": "image/Ninas.jpeg", "size": 80681, "eTag": "4e419ed0e6370e14da847c79cdcea855", "sequencer": "00685C6F0BABB4F2AB"
+                }
+            }
+        }
+    ]
+}

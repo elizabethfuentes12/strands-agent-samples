@@ -1,0 +1,34 @@
+# Core Strands Agent dependencies
+strands>=1.0.0
+strands-agents
+strands-agents-builder
+strands-agents-tools>=0.2.1
+strands-tools>=0.1.0
+strands-agents[anthropic]
+strands-agents[a2a]
+strands-agents-tools[a2a_client]
+
+# AI/ML and Vector Search
+anthropic>=0.18.0
+faiss-cpu
+mem0ai
+numpy
+opensearch-py
+
+# AWS and Cloud Services
+boto3>=1.34.0
+
+# Web Framework and API
+fastapi>=0.110.0
+uvicorn>=0.27.0
+
+# MCP (Model Context Protocol)
+mcp>=0.1.0
+mcp[cli]
+mcp-server-git
+
+# Additional Tools and Utilities
+a2a>=0.1.0
+matplotlib
+langfuse
+ragas
