@@ -25,7 +25,6 @@ This repository contains tools and examples for building AI agents capable of un
 | File | Description | Purpose |
 |------|-------------|---------|
 | [Video Reader Custom Tool](notebook/video_reader.py) | A custom tool for processing video content. It extracts frames from videos at specified intervals, converts them to base64-encoded images, and provides them to the agent for analysis | Video frame extraction and analysis |
-| [S3 Video Memory Tool](notebook/s3_video_memory.py) | Custom tool for handling video processing with S3 integration and memory storage capabilities | Cloud video processing with memory |
 | [MCP Calculator](notebook/mcp_calulator.py) | Example MCP server implementation for calculator functionality | MCP server example |
 | [Requirements](notebook/requirements.txt) | Required Python packages for running all notebooks | Dependency management |
 
@@ -122,7 +121,6 @@ strands-agent-multi-understanding/
 3. **Learn observability**: `Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb`
 4. **Explore protocols**: `Strands_MCP_AND_Tools.ipynb`
 5. **Advanced collaboration**: `Strands_A2A_Tools.ipynb`
-6. **Cloud integration**: `s3_video_memory_demo.ipynb`
 
 ## 🏗️ CDK Application
 

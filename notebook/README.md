@@ -11,14 +11,13 @@ This directory contains notebooks and supporting files for demonstrating multi-m
 | [🔍 Observability with LangFuse and Evaluation with RAGAS](Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb) | Comprehensive notebook demonstrating how to implement observability and evaluation for Strands agents using LangFuse for tracing and RAGAS for evaluation metrics with a restaurant recommendation use case | Python |
 | [🔧 Model Context Protocol (MCP) Tools](Strands_MCP_AND_Tools.ipynb) | Tutorial notebook showing how to create and integrate MCP servers with Strands agents, including custom calculator tools and weather services | Python |
 | [🤝 Agent-to-Agent (A2A) Protocol](Strands_A2A_Tools.ipynb) | Advanced notebook demonstrating inter-agent communication using the A2A protocol, showcasing how multiple agents can collaborate and share information | Python |
-| [📹 S3 Video Memory Demo](s3_video_memory_demo.ipynb) | Specialized notebook for processing videos stored in S3 with memory capabilities, combining cloud storage with intelligent video analysis | Python |
+
 
 ## Supporting Files
 
 | File | Description |
 |------|-------------|
 | [Video Reader Custom Tool](video_reader.py) | A custom tool for processing video content. It extracts frames from videos at specified intervals, converts them to base64-encoded images, and provides them to the agent for analysis |
-| [S3 Video Memory Tool](s3_video_memory.py) | Custom tool for handling video processing with S3 integration and memory storage capabilities |
 | [MCP Calculator](mcp_calulator.py) | Example MCP server implementation for calculator functionality |
 | [Requirements](requirements.txt) | Required Python packages for running all notebooks |
 
