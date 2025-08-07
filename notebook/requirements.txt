@@ -10,3 +10,6 @@ strands-agents-tools[a2a_client]
 matplotlib
 langfuse
 ragas
+mem0ai
+opensearch-py
+faiss-cpu
