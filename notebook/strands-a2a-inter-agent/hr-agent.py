@@ -23,7 +23,7 @@ def health_check():
 
 model = AnthropicModel(
     client_args={
-        "api_key": os.getenv("api_key"),
+       "api_key": os.getenv("api_key"),  # Get API key from environment variables
     },
     # **model_config
     max_tokens=1028,

@@ -7,16 +7,16 @@ from urllib.parse import urlparse
 from strands.models.anthropic import AnthropicModel
 
 
-# Definir URLs correctamente - no usar os.environ.get() para valores literales
+# Define URLs correctly - do not use os.environ.get() for literal values
 EMPLOYEE_INFO_URL = "http://localhost:8002/mcp/"
 EMPLOYEE_AGENT_URL = "http://localhost:8001/"
 
-# Crear el cliente MCP
+# Create the MCP client
 employee_mcp_client = MCPClient(lambda: streamablehttp_client(EMPLOYEE_INFO_URL))
 
 model = AnthropicModel(
     client_args={
-        "api_key": os.getenv("api_key"),
+        "api_key": os.getenv("api_key"),  # Get API key from environment variables
     },
     # **model_config
     max_tokens=1028,
@@ -26,7 +26,7 @@ model = AnthropicModel(
     }
 )
 
-# Usar el cliente MCP dentro de un contexto
+# Using the MCP client within a context
 with employee_mcp_client:
     tools = employee_mcp_client.list_tools_sync()
     

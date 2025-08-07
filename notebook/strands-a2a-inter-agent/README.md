@@ -12,29 +12,18 @@ The system consists of three main components:
 
 ## Setup and Running
 
-### 1. Start the MCP Server
+### A2A System Runner: Runs the MCP Server, Employee Agent, and HR Agent in parallel
 
-```bash
-python server.py
+### 1. Set your API key:
+ ```bash
+   export api_key='your-anthropic-api-key-here'
 ```
 
-This will start the MCP server on port 8002.
-
-### 2. Start the Employee Agent
-
-```bash
-python employee-agent.py
+### 2. Start the system:
+  ```bash
+   python run_a2a_system.py
 ```
 
-This will start the Employee Agent on port 8001.
-
-### 3. Start the HR Agent
-
-```bash
-python hr-agent.py
-```
-
-This will start the HR Agent on port 8000.
 
 ### 4. Make Requests to the HR Agent
 
