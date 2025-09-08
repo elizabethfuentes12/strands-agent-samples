@@ -15,6 +15,7 @@ This repository contains tools and examples for building AI agents capable of un
 |----------|----------|----------|----------|
 | [🎯 Multi-Agent Multimodal Analysis](notebook/multi-understanding.ipynb) | Basic demonstration notebook that shows how to process and analyze different types of media (images, documents, videos) and analyzing content and generating human-readable responses using Strands Agent | Multi-modal processing, AWS Bedrock integration, Custom tools | Python |
 | [🎯 Multi-Agent Multimodal Analysis with FAISS Memory](notebook/multi-understanding-with-memory.ipynb) | Advanced notebook showcasing multi-modal (images, documents, videos) analysis with FAISS memory capabilities for storing and retrieving information across sessions | FAISS memory, Persistent storage, Cross-session continuity, User-specific memory | Python |
+| [☁️ Multi-Agent Multimodal Analysis with S3 Vectors Memory](notebook/multi-understanding-with-s3-memory.ipynb) | Production-ready notebook demonstrating multi-modal content processing with Amazon S3 Vectors as the memory backend, providing AWS-native scalable memory storage | S3 Vectors memory, AWS-native storage, Auto-scaling, Enterprise-grade memory, AWS integration | Python |
 | [🔍 Observability with LangFuse and Evaluation with RAGAS](notebook/Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb) | Comprehensive notebook demonstrating how to implement observability and evaluation for Strands agents using LangFuse for tracing and RAGAS for evaluation metrics with a restaurant recommendation use case | LangFuse tracing, RAGAS evaluation, Performance monitoring, Quality assessment | Python |
 | [🔧 Model Context Protocol (MCP) Tools](notebook/Strands_A2A_Tools.ipynb) | Tutorial notebook showing how to create and integrate MCP servers with Strands agents, including custom calculator tools and weather services | MCP server creation, Custom tools, Protocol integration, Calculator and weather examples | Python |
 | [🤝 Agent-to-Agent (A2A) Protocol](notebook/Strands_A2A_Tools.ipynb) | Advanced notebook demonstrating inter-agent communication using the A2A protocol, showcasing how multiple agents can collaborate and share information | Inter-agent communication, A2A protocol, Collaborative workflows, Multi-agent systems | Python |
@@ -25,6 +26,7 @@ This repository contains tools and examples for building AI agents capable of un
 | File | Description | Purpose |
 |------|-------------|---------|
 | [Video Reader Custom Tool](notebook/video_reader.py) | A custom tool for processing video content. It extracts frames from videos at specified intervals, converts them to base64-encoded images, and provides them to the agent for analysis | Video frame extraction and analysis |
+| [S3 Memory Tool](notebook/README_S3_Memory.md) | AWS-native memory management tool using Amazon S3 Vectors as backend, providing scalable and persistent memory for Strands agents | S3 Vectors integration and memory management |
 | [MCP Calculator](notebook/mcp_calulator.py) | Example MCP server implementation for calculator functionality | MCP server example |
 | [Requirements](notebook/requirements.txt) | Required Python packages for running all notebooks | Dependency management |
 
@@ -38,9 +40,11 @@ This repository contains tools and examples for building AI agents capable of un
 
 ### 🧠 Memory & Persistence
 - **FAISS-Powered Search**: Efficient similarity search for relevant information
+- **S3 Vectors Memory**: AWS-native scalable memory with Amazon S3 Vectors
 - **Cross-Session Memory**: Information persists between application restarts
 - **User-Specific Storage**: Personalized memory with unique user IDs
 - **Contextual Retrieval**: Smart retrieval based on query context
+- **Enterprise-Grade Storage**: Production-ready memory with automatic scaling
 
 ### 🔍 Observability & Evaluation
 - **LangFuse Integration**: Comprehensive tracing and monitoring
@@ -52,7 +56,7 @@ This repository contains tools and examples for building AI agents capable of un
 - **Model Context Protocol (MCP)**: Standardized tool integration
 - **Agent-to-Agent (A2A)**: Inter-agent communication and collaboration
 - **Custom Tool Development**: Build specialized tools for specific needs
-- **Serverless Deployment**: Cloud-native implementations
+- **Serverless Deployment**: AWS-native implementations
 
 ### ☁️ Cloud Integration
 - **AWS Bedrock**: Access to state-of-the-art foundation models
@@ -67,6 +71,7 @@ strands-agent-multi-understanding/
 ├── notebook/                           # Jupyter notebooks and examples
 │   ├── multi-understanding.ipynb      # Basic multi-modal processing
 │   ├── multi-understanding-with-memory.ipynb  # Advanced with FAISS memory
+│   ├── multi-understanding-with-s3-memory.ipynb # Production-ready with S3 Vectors memory
 │   ├── Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb
 │   ├── Strands_MCP_AND_Tools.ipynb    # MCP integration examples
 │   ├── Strands_A2A_Tools.ipynb        # Agent-to-Agent communication
@@ -118,9 +123,10 @@ strands-agent-multi-understanding/
 
 1. **Start with basics**: `multi-understanding.ipynb`
 2. **Add memory**: `multi-understanding-with-memory.ipynb`
-3. **Learn observability**: `Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb`
-4. **Explore protocols**: `Strands_MCP_AND_Tools.ipynb`
-5. **Advanced collaboration**: `Strands_A2A_Tools.ipynb`
+3. **Production memory**: `multi-understanding-with-s3-memory.ipynb`
+4. **Learn observability**: `Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb`
+5. **Explore protocols**: `Strands_MCP_AND_Tools.ipynb`
+6. **Advanced collaboration**: `Strands_A2A_Tools.ipynb`
 
 ## 🏗️ CDK Application
 

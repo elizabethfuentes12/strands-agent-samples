@@ -8,6 +8,7 @@ This directory contains notebooks and supporting files for demonstrating multi-m
 |----------|----------|----------|
 | [🎯 Multi-Agent Multimodal Analysis](multi-understanding.ipynb) | Basic demonstration notebook that shows how to process and analyze different types of media (images, documents, videos) and analyzing content and generating human-readable responses using Strands Agent | Python |
 | [🎯 Multi-Agent Multimodal Analysis with FAISS Memory](multi-understanding-with-memory.ipynb) | Advanced notebook showcasing multi-modal (images, documents, videos) analysis with FAISS memory capabilities for storing and retrieving information across sessions | Python |
+| [☁️ Multi-Agent Multimodal Analysis with S3 Vectors Memory](multi-understanding-with-s3-memory.ipynb) | Production-ready notebook demonstrating multi-modal content processing with Amazon S3 Vectors as the memory backend, providing AWS-native scalable memory storage | Python |
 | [🔍 Observability with LangFuse and Evaluation with RAGAS](Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb) | Comprehensive notebook demonstrating how to implement observability and evaluation for Strands agents using LangFuse for tracing and RAGAS for evaluation metrics with a restaurant recommendation use case | Python |
 | [🔧 Model Context Protocol (MCP) Tools](Strands_MCP_AND_Tools.ipynb) | Tutorial notebook showing how to create and integrate MCP servers with Strands agents, including custom calculator tools and weather services | Python |
 | [🤝 Agent-to-Agent (A2A) Protocol](Strands_A2A_Tools.ipynb) | Advanced notebook demonstrating inter-agent communication using the A2A protocol, showcasing how multiple agents can collaborate and share information | Python |
@@ -18,6 +19,7 @@ This directory contains notebooks and supporting files for demonstrating multi-m
 | File | Description |
 |------|-------------|
 | [Video Reader Custom Tool](video_reader.py) | A custom tool for processing video content. It extracts frames from videos at specified intervals, converts them to base64-encoded images, and provides them to the agent for analysis |
+| [S3 Memory Tool](README_S3_Memory.md) | AWS-native memory management tool using Amazon S3 Vectors as backend, providing scalable and persistent memory for Strands agents |
 | [MCP Calculator](mcp_calulator.py) | Example MCP server implementation for calculator functionality |
 | [Requirements](requirements.txt) | Required Python packages for running all notebooks |
 
@@ -44,6 +46,7 @@ This directory contains notebooks and supporting files for demonstrating multi-m
 ### Basic Multi-Modal Processing
 - **`multi-understanding.ipynb`**: Entry-level notebook demonstrating core multi-modal capabilities
 - **`multi-understanding-with-memory.ipynb`**: Enhanced version with persistent memory using FAISS
+- **`multi-understanding-with-s3-memory.ipynb`**: Production-ready version with AWS-native S3 Vectors memory
 
 ### Advanced Features
 - **`Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb`**: Production-ready observability and evaluation
@@ -69,9 +72,11 @@ The `data-sample/` directory includes sample files for testing:
 
 ### 🧠 Memory & Persistence
 - FAISS-powered similarity search
+- S3 Vectors AWS-native memory
 - Cross-session memory retention
 - Contextual information retrieval
 - User-specific memory storage
+- Enterprise-grade scalable storage
 
 ### 🔍 Observability & Evaluation
 - LangFuse integration for tracing
