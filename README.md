@@ -1,210 +1,336 @@
 # Strands Agent Samples
 
-A comprehensive repository for implementing and demonstrating multi-modal understanding capabilities using the [Strands Agent framework](https://strandsagents.com/). This project enables processing and analysis of various types of content including documents, images, and videos with advanced features like persistent memory, observability, and inter-agent communication.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python 3.9+">
+  <img src="https://img.shields.io/badge/AWS-Bedrock-orange.svg" alt="AWS Bedrock">
+  <img src="https://img.shields.io/badge/License-MIT--0-green.svg" alt="License MIT-0">
+</p>
 
-## Overview
+Production-ready examples for building **multimodal AI agents** with the [Strands Agent framework](https://strandsagents.com/). Process images, documents, and videos with persistent memory using **10-30 lines of code**.
 
-This repository contains tools and examples for building AI agents capable of understanding and processing multiple types of media:
-- **Images** (PNG, JPEG/JPG, GIF, WebP)
-- **Documents** (PDF, CSV, DOCX, XLS, XLSX)
-- **Videos** (MP4, MOV, AVI, MKV, WebM)
+---
 
-## 📚 Notebooks and Examples
+## 🎯 What You'll Build
 
-| Use Case | Overview | Features | Language |
-|----------|----------|----------|----------|
-| [🎯 Multi-Agent Multimodal Analysis](notebook/multi-understanding.ipynb) | Basic demonstration notebook that shows how to process and analyze different types of media (images, documents, videos) and analyzing content and generating human-readable responses using Strands Agent | Multi-modal processing, AWS Bedrock integration, Custom tools | Python |
-| [🎯 Multi-Agent Multimodal Analysis with FAISS Memory](notebook/multi-understanding-with-memory.ipynb) | Advanced notebook showcasing multi-modal (images, documents, videos) analysis with FAISS memory capabilities for storing and retrieving information across sessions | FAISS memory, Persistent storage, Cross-session continuity, User-specific memory | Python |
-| [☁️ Multi-Agent Multimodal Analysis with S3 Vectors Memory](notebook/multi-understanding-with-s3-memory.ipynb) | Production-ready notebook demonstrating multi-modal content processing with Amazon S3 Vectors as the memory backend, providing AWS-native scalable memory storage | S3 Vectors memory, AWS-native storage, Auto-scaling, Enterprise-grade memory, AWS integration | Python |
-| [🔍 Observability with LangFuse and Evaluation with RAGAS](notebook/Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb) | Comprehensive notebook demonstrating how to implement observability and evaluation for Strands agents using LangFuse for tracing and RAGAS for evaluation metrics with a restaurant recommendation use case | LangFuse tracing, RAGAS evaluation, Performance monitoring, Quality assessment | Python |
-| [🔧 Model Context Protocol (MCP) Tools](notebook/Strands_A2A_Tools.ipynb) | Tutorial notebook showing how to create and integrate MCP servers with Strands agents, including custom calculator tools and weather services | MCP server creation, Custom tools, Protocol integration, Calculator and weather examples | Python |
-| [🤝 Agent-to-Agent (A2A) Protocol](notebook/Strands_A2A_Tools.ipynb) | Advanced notebook demonstrating inter-agent communication using the A2A protocol, showcasing how multiple agents can collaborate and share information | Inter-agent communication, A2A protocol, Collaborative workflows, Multi-agent systems | Python |
-| [📹 S3 Video Memory Demo](notebook/s3_video_memory_demo.ipynb) | Specialized notebook for processing videos stored in S3 with memory capabilities, combining cloud storage with intelligent video analysis | S3 integration, Cloud video processing, Memory storage, Scalable pipelines | Python |
+Build intelligent agents that process multiple content types with **built-in tools**—no custom code required:
 
-## 🛠️ Supporting Tools and Files
+| Content Type | Formats | Built-in Tool |
+|--------------|---------|---------------|
+| **Images** | PNG, JPEG, GIF, WebP | `image_reader`, `generate_image` |
+| **Documents** | PDF, CSV, DOCX, XLS, XLSX | `file_read` |
+| **Videos** | MP4, MOV, AVI, MKV, WebM | `video_reader`, `nova_reels` |
 
-| File | Description | Purpose |
-|------|-------------|---------|
-| [Video Reader Custom Tool](notebook/video_reader.py) | A custom tool for processing video content. It extracts frames from videos at specified intervals, converts them to base64-encoded images, and provides them to the agent for analysis | Video frame extraction and analysis |
-| [S3 Memory Tool](notebook/README_S3_Memory.md) | AWS-native memory management tool using Amazon S3 Vectors as backend, providing scalable and persistent memory for Strands agents | S3 Vectors integration and memory management |
-| [MCP Calculator](notebook/mcp_calulator.py) | Example MCP server implementation for calculator functionality | MCP server example |
-| [Requirements](notebook/requirements.txt) | Required Python packages for running all notebooks | Dependency management |
+**Why Strands Agents?**
 
-## 🚀 Key Features
+```python
+# Traditional approach: 100+ lines of custom code
+# Strands approach: 10 lines with built-in tools
 
-### 🎯 Multi-Modal Processing
-- **Image Analysis**: Process and understand visual content
-- **Document Processing**: Extract and summarize text from various formats
-- **Video Analysis**: Frame extraction and temporal understanding
-- **Cross-Modal Correlation**: Connect insights across different media types
+from strands import Agent
+from strands.models import BedrockModel
+from strands_tools import generate_image, nova_reels
 
-### 🧠 Memory & Persistence
-- **FAISS-Powered Search**: Efficient similarity search for relevant information
-- **S3 Vectors Memory**: AWS-native scalable memory with Amazon S3 Vectors
-- **Cross-Session Memory**: Information persists between application restarts
-- **User-Specific Storage**: Personalized memory with unique user IDs
-- **Contextual Retrieval**: Smart retrieval based on query context
-- **Enterprise-Grade Storage**: Production-ready memory with automatic scaling
+agent = Agent(
+    model=BedrockModel(model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0"),
+    tools=[generate_image, nova_reels]  # Built-in tools ready to use!
+)
 
-### 🔍 Observability & Evaluation
-- **LangFuse Integration**: Comprehensive tracing and monitoring
-- **RAGAS Metrics**: Automated evaluation of agent performance
-- **Performance Monitoring**: Real-time insights into agent behavior
-- **Quality Assessment**: Continuous improvement through evaluation
-
-### 🔧 Protocol Integration
-- **Model Context Protocol (MCP)**: Standardized tool integration
-- **Agent-to-Agent (A2A)**: Inter-agent communication and collaboration
-- **Custom Tool Development**: Build specialized tools for specific needs
-- **Serverless Deployment**: AWS-native implementations
-
-### ☁️ Cloud Integration
-- **AWS Bedrock**: Access to state-of-the-art foundation models
-- **S3 Storage**: Scalable storage for media files
-- **Lambda Functions**: Serverless agent deployment
-- **CDK Infrastructure**: Infrastructure as code
-
-## 📁 Repository Structure
-
-```
-strands-agent-multi-understanding/
-├── notebook/                           # Jupyter notebooks and examples
-│   ├── multi-understanding.ipynb      # Basic multi-modal processing
-│   ├── multi-understanding-with-memory.ipynb  # Advanced with FAISS memory
-│   ├── multi-understanding-with-s3-memory.ipynb # Production-ready with S3 Vectors memory
-│   ├── Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb
-│   ├── Strands_MCP_AND_Tools.ipynb    # MCP integration examples
-│   ├── Strands_A2A_Tools.ipynb        # Agent-to-Agent communication
-│   ├── s3_video_memory_demo.ipynb     # S3 video processing
-│   ├── video_reader.py                # Custom video processing tool
-│   ├── s3_video_memory.py             # S3 video memory tool
-│   ├── mcp_calulator.py               # MCP calculator server
-│   ├── requirements.txt               # Python dependencies
-│   └── data-sample/                   # Sample files for testing
-└── my_agent_cdk/                      # AWS CDK application
-    ├── lambdas/code/lambda-s-agent    # Weather forecasting Lambda
-    └── lambdas/code/lambda-s-multimodal # Multi-modal processing Lambda
+response = agent("Generate a travel image and video of Paris")
 ```
 
-## 🏁 Getting Started
+✅ **10-30 lines of code** for complete agents  
+✅ **Built-in tools** - No custom code required  
+✅ **AWS-native** - Seamless Bedrock integration  
+✅ **Production-ready** - Memory, observability included
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.8+
-- AWS account with Bedrock access
+
+- AWS account with [Amazon Bedrock](https://aws.amazon.com/bedrock/) access
+- Python 3.9 or later
 - AWS CLI configured
-- Node.js (for CDK deployment)
 
-### Quick Start
+### Installation
 
-1. **Clone the repository**:
-   ```bash
-   git clone [strands-agent-samples](https://github.com/elizabethfuentes12/strands-agent-samples)
-   ```
+```bash
+# Clone repository
+git clone https://github.com/elizabethfuentes12/strands-agent-samples
+cd strands-agent-samples/notebook
 
-2. **Set up the notebook environment**:
-   ```bash
-   cd notebook
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
+# Set up environment
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 
-3. **Configure AWS credentials** for Bedrock access:
-   ```bash
-   aws configure
-   ```
+# Configure AWS
+aws configure
 
-4. **Start exploring**:
-   ```bash
-   jupyter notebook
-   ```
+# Open notebooks in your preferred IDE
+# VS Code, JupyterLab, or any notebook editor
+```
 
-### Recommended Learning Path
+---
 
-1. **Start with basics**: `multi-understanding.ipynb`
-2. **Add memory**: `multi-understanding-with-memory.ipynb`
-3. **Production memory**: `multi-understanding-with-s3-memory.ipynb`
-4. **Learn observability**: `Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb`
-5. **Explore protocols**: `Strands_MCP_AND_Tools.ipynb`
-6. **Advanced collaboration**: `Strands_A2A_Tools.ipynb`
+## 📚 Complete Learning Path
 
-## 🏗️ CDK Application
+| # | Notebook | Built-in Tools | Code | What You Build |
+|---|----------|----------------|------|----------------|
+| **Beginner** | | | | |
+| 1 | [Hello World](notebook/01-hello-world-strands-agents.ipynb) | Basic tools | ~10 lines | Basic agent setup |
+| 2 | [Custom Tools](notebook/02-custom-tools.ipynb) | Custom tools | ~15 lines | Tool integration |
+| 3 | [MCP Integration](notebook/03-mcp-integration.ipynb) | MCP | ~20 lines | External services |
+| **Multimodal AI** | **[📁 multimodal-understanding/](notebook/multimodal-understanding/)** | | | |
+| 01 | [Image & Document Analysis](notebook/multimodal-understanding/01-multimodal-basic.ipynb) | `image_reader`, `file_read` | ~15 lines | Multimodal content processing |
+| 02 | [Video Analysis & MCP](notebook/multimodal-understanding/02-multimodal-with-mcp.ipynb) | `video_reader`, MCP | ~20 lines | Video processing + external tools |
+| 03 | [Local Memory with FAISS](notebook/multimodal-understanding/03-multimodal-with-faiss.ipynb) | `mem0_memory` | ~25 lines | Vector storage & semantic search |
+| 04 | [Production Memory with S3](notebook/multimodal-understanding/04-multimodal-with-s3-vectors.ipynb) | `s3_vector_memory` | ~25 lines | AWS-native vector storage |
+| 05 | [AI Content Generation](notebook/multimodal-understanding/05-travel-content-generator.ipynb) | `generate_image`, `nova_reels` | ~30 lines | Generate images & videos |
+| 06 | [Intelligent Travel Assistant](notebook/multimodal-understanding/06-travel-assistant-demo.ipynb) | All tools combined | ~35 lines | Complete AI assistant |
+| **Advanced** | | | | |
+| 4 | [MCP Tools](notebook/04-Strands_MCP_AND_Tools.ipynb) | MCP servers | ~25 lines | Custom MCP servers |
+| 5 | [Agent-to-Agent](notebook/05-Strands_A2A_Tools.ipynb) | A2A protocol | ~30 lines | Multi-agent systems |
+| 6 | [Observability](notebook/06-Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb) | LangFuse, RAGAS | ~35 lines | Production monitoring |
 
-The `/my_agent_cdk/` directory contains an AWS CDK application for deploying serverless Lambda functions:
+**[📖 Detailed guides](notebook/README.md)** | **[📝 Article](https://dev.to/aws/multi-modal-content-processing-with-strands-agent-and-faiss-memory-39hg)**
 
-### Available Lambda Functions
+---
 
-| Function | Description | Use Case |
-|----------|-------------|----------|
-| **Weather Forecasting Agent** | Lambda function using Strands Agent for weather forecasting | API-based weather services |
-| **Multi-modal Processing Agent** | Lambda function for processing images, documents, and videos | Serverless content analysis |
+## 🏗️ Repository Structure
 
-### Deployment Instructions
+```
+strands-agent-samples/
+├── notebook/                              # Learning materials
+│   ├── 01-hello-world-strands-agents.ipynb
+│   ├── 02-custom-tools.ipynb
+│   ├── 03-mcp-integration.ipynb
+│   ├── 04-Strands_MCP_AND_Tools.ipynb
+│   ├── 05-Strands_A2A_Tools.ipynb
+│   ├── 06-Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb
+│   ├── multimodal-understanding/         # 6-chapter journey
+│   │   ├── 01-multimodal-basic.ipynb
+│   │   ├── 02-multimodal-with-mcp.ipynb
+│   │   ├── 03-multimodal-with-faiss.ipynb
+│   │   ├── 04-multimodal-with-s3-vectors.ipynb
+│   │   ├── 05-travel-content-generator.ipynb
+│   │   ├── 06-travel-assistant-demo.ipynb
+│   │   ├── video_reader.py
+│   │   ├── video_reader_local.py
+│   │   ├── s3_memory.py
+│   │   └── travel_content_generator.py
+│   ├── mcp_calulator.py
+│   ├── mcp_custom_tools_server.py
+│   ├── run_a2a_system.py
+│   ├── data-sample/                      # Test files
+│   └── requirements.txt
+└── my_agent_cdk/                         # AWS CDK deployment
+    ├── lambdas/code/lambda-s-agent       # Weather agent
+    └── lambdas/code/lambda-s-multimodal  # Multimodal agent
+```
 
-1. **Navigate to CDK directory**:
-   ```bash
-   cd my_agent_cdk
-   ```
+---
 
-2. **Install dependencies**:
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   ```
+## 🎯 Key Features
 
-3. **Package Lambda layers**:
-   ```bash
-   pip install -r layers/lambda_requirements.txt --python-version 3.12 --platform manylinux2014_aarch64 --target layers/strands/_dependencies --only-binary=:all:
-   python layers/package_for_lambda.py
-   ```
+### Multimodal Processing
 
-4. **Deploy**:
-   ```bash
-   cdk bootstrap  # First time only
-   cdk deploy
-   ```
+Process diverse content types through unified interfaces:
 
-For detailed instructions, see the [CDK application README](my_agent_cdk/README.md).
+- **Image Analysis** - Visual understanding with Claude Sonnet
+- **Document Processing** - Text extraction from PDFs, Office files
+- **Video Analysis** - Frame extraction and temporal understanding
+- **Content Generation** - Create images and videos with Amazon Nova
+
+### Memory Systems
+
+Build agents that remember and learn:
+
+- **FAISS** - Local vector storage for development
+- **S3 Vectors** - AWS-native production memory
+- **User Isolation** - Multi-tenant memory management
+- **Semantic Search** - Context-aware information retrieval
+
+### Production Patterns
+
+Enterprise-ready implementations:
+
+- **Observability** - LangFuse tracing and monitoring
+- **Evaluation** - RAGAS metrics for quality assessment
+- **Multi-Agent** - A2A protocol for agent collaboration
+- **Serverless** - AWS Lambda deployment with CDK
+
+---
+
+## 🛠️ Technologies
+
+### AI Models
+
+| Model | Purpose | Use Case |
+|-------|---------|----------|
+| [Claude 3.5 Sonnet](https://www.anthropic.com/claude) | Text, images, documents | Multimodal understanding |
+| [Amazon Nova Pro](https://aws.amazon.com/bedrock/nova/) | Video analysis | Video content processing |
+| [Amazon Nova Canvas](https://aws.amazon.com/bedrock/nova/) | Image generation | Create visual content |
+| [Amazon Nova Reel](https://aws.amazon.com/bedrock/nova/) | Video generation | Generate video content |
+| [Titan Embeddings](https://aws.amazon.com/bedrock/titan/) | Vector generation | Semantic search |
+
+### AWS Services
+
+| Service | Purpose |
+|---------|---------|
+| [Amazon Bedrock](https://aws.amazon.com/bedrock/) | Model inference |
+| [Amazon S3 Vectors](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html) | Vector storage |
+| [Amazon S3](https://aws.amazon.com/s3/) | Media storage |
+| [AWS Lambda](https://aws.amazon.com/lambda/) | Serverless compute |
+
+### Frameworks
+
+| Framework | Purpose |
+|-----------|---------|
+| [Strands Agents SDK](https://github.com/strands-agents/sdk-python) | Agent framework |
+| [FAISS](https://github.com/facebookresearch/faiss) | Vector search |
+| [LangFuse](https://langfuse.com/) | Observability |
+| [RAGAS](https://docs.ragas.io/) | Evaluation |
+
+---
 
 ## 💡 Use Cases
 
-- **Content Analysis**: Automated processing of mixed media content
-- **Knowledge Management**: Building searchable knowledge bases from various media types
-- **Educational Tools**: Multi-modal learning assistants with memory
-- **Business Intelligence**: Extracting insights from documents, images, and videos
-- **Quality Assurance**: Automated evaluation and monitoring of AI agents
-- **Collaborative AI**: Multi-agent systems for complex workflows
-- **Customer Support**: Intelligent assistants with observability and evaluation
-- **Research & Development**: Advanced AI experimentation with proper tooling
+### Content Intelligence
+- Automated content moderation for images and videos
+- Document analysis for compliance and insights
+- Multi-format data extraction and processing
 
-## 📖 Resources
+### Intelligent Assistants
+- Customer support with conversation memory
+- Research assistants with cross-modal correlation
+- Educational tutors with adaptive learning
 
-- [Strands Agent Documentation](https://strandsagents.com/)
-- [AWS Bedrock Documentation](https://docs.aws.amazon.com/bedrock/)
+### Enterprise Solutions
+- Business intelligence with automated insights
+- Knowledge management with semantic search
+- Automated content generation pipelines
+
+---
+
+## ☁️ AWS CDK Deployment
+
+Deploy serverless agents to AWS Lambda:
+
+```bash
+cd my_agent_cdk
+
+# Install dependencies
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# Package Lambda layers
+pip install -r layers/lambda_requirements.txt \
+  --python-version 3.12 \
+  --platform manylinux2014_aarch64 \
+  --target layers/strands/_dependencies \
+  --only-binary=:all:
+
+python layers/package_for_lambda.py
+
+# Deploy
+cdk bootstrap  # First time only
+cdk deploy
+```
+
+**Available Functions:**
+- **Weather Agent** - Forecasting with Strands Agent
+- **Multimodal Agent** - Process images, documents, videos
+
+**[📖 View CDK documentation →](my_agent_cdk/README.md)**
+
+---
+
+## 📖 Documentation
+
+### Strands Agents
+- [Official Documentation](https://strandsagents.com/)
+- [SDK Repository](https://github.com/strands-agents/sdk-python)
+- [Tools Package](https://github.com/strands-agents/tools)
+
+### AWS Services
+- [Amazon Bedrock User Guide](https://docs.aws.amazon.com/bedrock/)
+- [Amazon S3 Vectors Guide](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html)
+- [Amazon Nova Models](https://docs.aws.amazon.com/nova/latest/userguide/)
+
+### Frameworks
 - [LangFuse Documentation](https://langfuse.com/docs)
 - [RAGAS Documentation](https://docs.ragas.io/)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [Agent-to-Agent Protocol](https://a2a.ai/)
 
+### Articles
+- [Multi-Modal Content Processing with FAISS Memory](https://dev.to/aws/multi-modal-content-processing-with-strands-agent-and-faiss-memory-39hg)
+
+---
+
+## 🎓 Best Practices
+
+### Development Workflow
+1. Start with beginner notebooks
+2. Progress through multimodal journey
+3. Test locally with FAISS
+4. Deploy to production with S3 Vectors
+
+### Cost Optimization
+- Use FAISS for development (free, local)
+- Monitor Bedrock API usage
+- Optimize prompt lengths
+- Use appropriate model sizes
+
+### Production Deployment
+- Implement observability with LangFuse
+- Set up evaluation with RAGAS
+- Use S3 Vectors for scalable memory
+- Follow AWS security best practices
+
+---
+
+## 🐛 Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| AWS credentials not found | Run `aws configure` with valid credentials |
+| Bedrock access denied | Enable models in [Bedrock console](https://console.aws.amazon.com/bedrock/) |
+| Import errors | Verify `pip install -r requirements.txt` completed |
+| Video generation fails | Check S3 bucket exists and has permissions |
+
+**Need help?** Check [Strands documentation](https://strandsagents.com/) or [open an issue](https://github.com/elizabethfuentes12/strands-agent-samples/issues).
+
+---
+
 ## 🤝 Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 🔒 Security
 
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for security issue notifications.
+Report security issues per [CONTRIBUTING.md](CONTRIBUTING.md#security-issue-notifications).
 
 ## 📄 License
 
-This library is licensed under the MIT-0 License. See the [LICENSE](LICENSE) file.
+This library is licensed under the MIT-0 License. See [LICENSE](LICENSE).
 
 ---
 
-**🇻🇪🇨🇱 ¡Gracias!**
-
-[Eli](https://www.linkedin.com/in/lizfue/) | [Dev.to](https://dev.to/elizabethfuentes12) | [GitHub](https://github.com/elizabethfuentes12/) | [Twitter](https://twitter.com/elizabethfue12) | [YouTube](https://www.youtube.com/channel/UCr0Gnc-t30m4xyrvsQpNp2Q)
+<p align="center">
+  <strong>Ready to build intelligent multimodal AI agents?</strong><br>
+  Start with the <a href="notebook/">notebooks</a> and explore the possibilities.
+</p>
 
 ---
 
-*Ready to build intelligent multi-modal AI agents? Start with the notebooks and explore the endless possibilities!*
+<p align="center">
+  🇻🇪🇨🇱 <strong>Created by</strong> <a href="https://www.linkedin.com/in/lizfue/">Eli</a> | 
+  <a href="https://dev.to/elizabethfuentes12">Dev.to</a> | 
+  <a href="https://github.com/elizabethfuentes12/">GitHub</a> | 
+  <a href="https://twitter.com/elizabethfue12">Twitter</a> | 
+  <a href="https://www.youtube.com/channel/UCr0Gnc-t30m4xyrvsQpNp2Q">YouTube</a>
+</p>

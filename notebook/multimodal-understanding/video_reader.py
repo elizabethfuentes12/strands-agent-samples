@@ -1,65 +1,66 @@
-from strands import tool
+"""
+Video Reader Tool for Strands Agents
+"""
 import boto3
 import os
 from botocore.exceptions import ClientError
 from typing import Dict, Any, Optional
+from strands import tool
+
 
 @tool
 def video_reader(
     video_path: str, 
     text_prompt: str = "Describe what you see in this video",
-    #model_id: Optional[str] = None,
     model_id: str = "us.amazon.nova-pro-v1:0",
     region: Optional[str] = None,
     s3_bucket: Optional[str] = None,
-    system_prompt: Optional[str] = None,
-    agent = None
+    system_prompt: Optional[str] = None
 ) -> Dict[str, Any]:
     """
-    Analyze video content using AWS Bedrock's Converse API.
+    Analyze video content using AWS Bedrock's multimodal capabilities.
     
-    This tool processes videos and uses Claude/Nova models to analyze video content 
-    through Bedrock's multimodal capabilities, similar to image_reader but for videos.
+    This tool processes videos and uses Nova/Claude models to analyze video content 
+    through Bedrock's Converse API.
+    
+    IMPORTANT MODEL LIMITATIONS (Amazon Nova):
+    For complete details see: https://docs.aws.amazon.com/nova/latest/userguide/prompting-vision-limitations.html
+    
+    - Only 1 video per request supported
+    - No audio analysis (visual content only)
+    - Limited temporal causality understanding
+    - Cannot identify or name people in videos
+    - Limited spatial reasoning capabilities
+    - May struggle with small text in videos
+    - Approximate counting only (not precise for large numbers)
+    - Will not process inappropriate/explicit content
+    - Not suitable for medical diagnostic purposes
     
     Args:
         video_path: Path to video file (local path or S3 URI like s3://bucket/video.mp4)
         text_prompt: Question or instruction for analyzing the video
-        model_id: Bedrock model ID to use for analysis (if None, uses agent's model)
-        region: AWS region for Bedrock client (if None, uses agent's region or us-west-2)
-        s3_bucket: S3 bucket name for uploading local videos (defaults to strands-video-analysis)
-        system_prompt: Custom system prompt for analysis (if None, uses agent's system_prompt)
-        agent: The Strands agent instance (automatically provided by framework)
+        model_id: Bedrock model ID to use for analysis
+        region: AWS region for Bedrock client
+        s3_bucket: S3 bucket name for uploading local videos
+        system_prompt: Custom system prompt for analysis
         
     Returns:
-        Dictionary with video analysis results in Converse API format
+        Dictionary with video analysis results
     """
+    # Validate Nova model limitations
+    if "identify" in text_prompt.lower() or "who is" in text_prompt.lower():
+        return {
+            "status": "error",
+            "content": [{"text": "❌ Nova models cannot identify or name people in videos"}]
+        }
+    
     try:
-        # Get model_id and region from agent if not provided
-        if not model_id and agent and hasattr(agent, 'model'):
-            if hasattr(agent.model, 'model_id'):
-                model_id = agent.model.model_id
-            elif hasattr(agent.model, 'model_name'):
-                model_id = agent.model.model_name
-            else:
-                model_id = "us.amazon.nova-pro-v1:0"  # Default fallback
-        elif not model_id:
-            model_id = "us.amazon.nova-pro-v1:0"  # Default fallback
-            
-        if not region and agent and hasattr(agent, 'model'):
-            if hasattr(agent.model, 'boto_session') and agent.model.boto_session:
-                region = agent.model.boto_session.region_name
-            elif hasattr(agent.model, 'region'):
-                region = agent.model.region
-            else:
-                region = "us-west-2"  # Default fallback
-        elif not region:
-            region = "us-west-2"  # Default fallback
-            
-        # Get system_prompt from agent if not provided
-        if not system_prompt and agent and hasattr(agent, 'system_prompt'):
-            system_prompt = agent.system_prompt
-        elif not system_prompt:
-            system_prompt = "Always answer in the same language you are asked."
+        # Get defaults from environment if not provided
+        if not region:
+            region = os.getenv('AWS_REGION', 'us-west-2')
+        
+        if not system_prompt:
+            system_prompt = "Always answer in the same language you are asked. Note: I can only analyze visual content, not audio."
         
         # Initialize Bedrock client
         session = boto3.Session(region_name=region)
@@ -79,7 +80,7 @@ def video_reader(
         else:
             # Upload local file to S3
             if not s3_bucket:
-                s3_bucket = os.getenv('AWS_S3_BUCKET', 'strands-video-analysis')
+                s3_bucket = os.getenv('VIDEO_READER_S3_BUCKET', 'strands-agents-samples-bucket')
             
             s3_uri = _upload_to_s3(video_path, s3_bucket, session)
             if not s3_uri:
@@ -88,7 +89,7 @@ def video_reader(
                     "content": [{"text": "❌ Failed to upload video to S3"}]
                 }
         
-        # Prepare message for Converse API (similar to your existing code)
+        # Prepare message for Converse API
         media_content = {
             'video': {
                 "format": video_format,
