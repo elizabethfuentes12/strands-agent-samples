@@ -14,9 +14,13 @@ The system consists of three main components:
 
 ### A2A System Runner: Runs the MCP Server, Employee Agent, and HR Agent in parallel
 
-### 1. Set your API key:
- ```bash
-   export api_key='your-anthropic-api-key-here'
+### 1. Configure AWS credentials
+
+The agents call Claude Haiku 5.5 on Amazon Bedrock (`global.anthropic.claude-haiku-5-5`). Make sure your AWS credentials are configured and that you have [model access](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html) in your account. Optional overrides:
+
+```bash
+export AWS_REGION=us-east-1
+export BEDROCK_MODEL_ID=global.anthropic.claude-haiku-5-5
 ```
 
 ### 2. Start the system:
@@ -35,33 +39,6 @@ curl -X POST --location "http://0.0.0.0:8000/inquire" \
 -d '{"question": "list employees that have skills related to AI programming"}'
 ```
 
-## Direct MCP Server Interaction
-
-If you want to interact directly with the MCP server (bypassing the agents), you can use the provided MCP client examples:
-
-### Using the Python Script
-
-```bash
-# Navigate to the notebooks directory
-cd ..
-
-# Run the script in interactive mode
-python mcp_client_example.py --interactive
-
-# List all skills
-python mcp_client_example.py --list-skills
-
-# Find employees with a specific skill
-python mcp_client_example.py --find-skill "Python"
-
-# Find employees with AI-related skills
-python mcp_client_example.py --find-ai-skills
-```
-
-### Using the Jupyter Notebook
-
-Open and run the `mcp_client_tutorial.ipynb` notebook in Jupyter to see a step-by-step guide on interacting with the MCP server.
-
 ## Architecture
 
 ```
@@ -78,6 +55,7 @@ The HR Agent receives questions from users, communicates with the Employee Agent
 
 ## Notes
 
-- The MCP Server uses the FastMCP framework to expose tools (functions) that can be called remotely
-- The Employee Agent uses the Strands framework to create an AI agent that can use these tools
-- The HR Agent provides a REST API endpoint for users to ask questions
+- The MCP Server uses `MCPServer` from the MCP Python SDK 2.x (formerly `FastMCP`) to expose tools over Streamable HTTP at `http://127.0.0.1:8002/mcp`
+- The Employee Agent uses `MCPClient(url=...)` and is exposed with `A2AServer(agent_factory=...)` on port 8001
+- The HR Agent uses the SDK-vended `make_a2a_client` tool (replaces the removed `A2AClientToolProvider` from `strands-agents-tools`) and provides a REST API endpoint for users to ask questions
+- Tested with `strands-agents` 1.65.0, `mcp` 2.3.0, `a2a-sdk` 0.3.26

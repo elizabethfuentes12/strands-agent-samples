@@ -1,7 +1,7 @@
 # Strands Agents Learning Repository
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python 3.9+">
+  <img src="https://img.shields.io/badge/Python-3.10+-blue.svg" alt="Python 3.10+">
   <img src="https://img.shields.io/badge/AWS-Bedrock-orange.svg" alt="AWS Bedrock">
   <img src="https://img.shields.io/badge/Strands-Agents-purple.svg" alt="Strands Agents">
 </p>
@@ -27,7 +27,7 @@ Build intelligent agents using **built-in tools**—no custom code required:
 ### Prerequisites
 
 - AWS account with [Amazon Bedrock](https://aws.amazon.com/bedrock/) access
-- Python 3.9 or later
+- Python 3.10 or later (tested with 3.11)
 - AWS CLI configured (`aws configure`)
 
 ### Installation
@@ -61,18 +61,18 @@ pip install -r requirements.txt
 
 ### 🚀 Multimodal AI Tutorials
 
-**[📁 multimodal-understanding/](multimodal-understanding/)** - 6 progressive tutorials from basic to production
+**[📁 multimodal_understanding/](multimodal_understanding/)** - 6 progressive tutorials from basic to production
 
 | Tutorial | Notebook | Built-in Tools | Code | What You Build |
 |----------|----------|----------------|------|----------------|
-| **01** | [Image & Document Analysis](multimodal-understanding/01-multimodal-basic.ipynb) | `image_reader`, `file_read` | ~15 lines | Multimodal content processing |
-| **02** | [Video Analysis & MCP](multimodal-understanding/02-multimodal-with-mcp.ipynb) | `video_reader`, MCP | ~20 lines | Video processing + external tools |
-| **03** | [Local Memory with FAISS](multimodal-understanding/03-multimodal-with-faiss.ipynb) | `mem0_memory` | ~25 lines | Vector storage & semantic search |
-| **04** | [Production Memory with S3](multimodal-understanding/04-multimodal-with-s3-vectors.ipynb) | `s3_vector_memory` | ~25 lines | AWS-native vector storage |
-| **05** | [AI Content Generation](multimodal-understanding/05-travel-content-generator.ipynb) | `generate_image`, `nova_reels` | ~30 lines | Generate images & videos |
-| **06** | [Intelligent Travel Assistant](multimodal-understanding/06-travel-assistant-demo.ipynb) | All tools combined | ~35 lines | Complete AI assistant |
+| **01** | [Image & Document Analysis](multimodal_understanding/01-multimodal-basic.ipynb) | `read` (SDK vended) | ~15 lines | Multimodal content processing |
+| **02** | [Video Analysis & MCP](multimodal_understanding/02-multimodal-with-mcp.ipynb) | `video_reader`, MCP | ~20 lines | Video processing + external tools |
+| **03** | [Local Long-Term Memory](multimodal_understanding/03-multimodal-with-faiss.ipynb) | `MemoryManager`, `FileMemoryStore` | ~25 lines | Cross-session memory |
+| **04** | [Production Memory with S3](multimodal_understanding/04-multimodal-with-s3-vectors.ipynb) | `s3_vector_memory` | ~25 lines | AWS-native vector storage |
+| **05** | [AI Content Generation](multimodal_understanding/05-travel-content-generator.ipynb) | `generate_image`, `generate_video`, `write` | ~30 lines | Generate images & videos |
+| **06** | [Intelligent Travel Assistant](multimodal_understanding/06-travel-assistant-demo.ipynb) | All tools combined | ~35 lines | Complete AI assistant |
 
-**[📖 View detailed multimodal guide →](multimodal-understanding/README.md)** | **[📝 Article](https://dev.to/aws/multi-modal-content-processing-with-strands-agent-and-faiss-memory-39hg)**
+**[📖 View detailed multimodal guide →](multimodal_understanding/README.md)** | **[📝 Article](https://dev.to/aws/multi-modal-content-processing-with-strands-agent-and-faiss-memory-39hg)**
 
 ---
 
@@ -86,7 +86,7 @@ notebook/
 ├── 04-Strands_MCP_AND_Tools.ipynb
 ├── 05-Strands_A2A_Tools.ipynb
 ├── 06-Strands_Observability_with_LangFuse_and_Evaluation_with_RAGAS.ipynb
-├── multimodal-understanding/              # 6-chapter journey
+├── multimodal_understanding/              # 6-chapter journey
 │   ├── 01-multimodal-basic.ipynb
 │   ├── 02-multimodal-with-mcp.ipynb
 │   ├── 03-multimodal-with-faiss.ipynb
@@ -114,11 +114,11 @@ notebook/
 - Create custom tools for specific tasks
 - Integrate external services via MCP
 
-### Multimodal AI (multimodal-understanding/)
+### Multimodal AI (multimodal_understanding/)
 
 - Process images, documents, and videos
-- Implement memory with FAISS (local) and S3 Vectors (production)
-- Generate content with Amazon Nova
+- Implement memory with `FileMemoryStore` (local) and S3 Vectors (production)
+- Generate content with Stability AI and Luma AI models on Amazon Bedrock
 - Build intelligent assistants
 
 ### Production Patterns (Advanced notebooks)
@@ -136,10 +136,10 @@ notebook/
 
 | Model | Purpose |
 |-------|---------|
-| [Claude 3.5 Sonnet](https://www.anthropic.com/claude) | Text, images, documents |
-| [Amazon Nova Pro](https://aws.amazon.com/bedrock/nova/) | Video analysis |
-| [Amazon Nova Canvas](https://aws.amazon.com/bedrock/nova/) | Image generation |
-| [Amazon Nova Reel](https://aws.amazon.com/bedrock/nova/) | Video generation |
+| [Claude Haiku 5.5](https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html) (`global.anthropic.claude-haiku-5-5`) | Text, images, documents |
+| [Amazon Nova 2 Lite](https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html) (`us.amazon.nova-2-lite-v1:0`) | Video analysis |
+| [Stability AI Stable Image Core](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-diffusion-stable-image-core-text-image-request-response.html) | Image generation |
+| [Luma AI Ray 2](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-luma.html) | Video generation |
 | [Titan Embeddings](https://aws.amazon.com/bedrock/titan/) | Vector generation |
 
 ### AWS Services
@@ -156,7 +156,7 @@ notebook/
 | Framework | Purpose |
 |-----------|---------|
 | [Strands Agents SDK](https://github.com/strands-agents/sdk-python) | Agent framework |
-| [FAISS](https://github.com/facebookresearch/faiss) | Local vector storage |
+| [MCP Python SDK 2.x](https://py.sdk.modelcontextprotocol.io/v2/) | MCP servers and clients |
 | [LangFuse](https://langfuse.com/) | Observability |
 | [RAGAS](https://docs.ragas.io/) | Evaluation |
 
@@ -210,7 +210,7 @@ notebook/
 4. Explore advanced topics based on needs
 
 ### Development Workflow
-- Test locally with FAISS before S3 Vectors
+- Test locally with `FileMemoryStore` before S3 Vectors
 - Monitor costs with AWS Cost Explorer
 - Use appropriate model sizes for tasks
 - Implement error handling and retries
@@ -230,7 +230,9 @@ notebook/
 | AWS credentials error | Run `aws configure` with valid credentials |
 | Bedrock access denied | Enable models in [Bedrock console](https://console.aws.amazon.com/bedrock/) |
 | Import errors | Verify `pip install -r requirements.txt` completed |
-| Memory not persisting | Check file permissions for FAISS index files |
+| Memory not persisting | Check the `.strands/memory/` folder is writable (FileMemoryStore) or the S3 Vectors bucket/index names |
+| `ImportError ... was removed in v0.9.0` | Import from `strands.vended_tools` instead of `strands_tools` ([migration guide](https://strandsagents.com/latest/documentation/docs/user-guide/concepts/tools/community-tools-package/)) |
+| `No module named 'mcp.server.fastmcp'` | MCP SDK 2.x renamed `FastMCP` to `MCPServer` (`from mcp.server.mcpserver import MCPServer`) |
 
 **Need help?** Check [Strands documentation](https://strandsagents.com/) or open an issue.
 

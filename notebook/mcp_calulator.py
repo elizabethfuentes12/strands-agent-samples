@@ -6,29 +6,24 @@ This example demonstrates how to:
 2. Connect a Strands agent to the MCP server
 3. Use the calculator tools through natural language
 
-from: https://github.com/strands-agents/docs/blob/main/docs/examples/python/mcp_calculator.py
+adapted from: https://github.com/strands-agents/docs/blob/main/docs/examples/python/mcp_calculator.py
+(updated for MCP Python SDK 2.x and Amazon Bedrock)
 """
 
 import threading
 import time
 import os
 
-from mcp.client.streamable_http import streamablehttp_client
-from mcp.server import FastMCP
+from mcp.server.mcpserver import MCPServer  # MCP Python SDK 2.x (FastMCP was renamed to MCPServer)
 from strands import Agent
 from strands.tools.mcp.mcp_client import MCPClient
-from strands.models.anthropic import AnthropicModel
+from strands.models import BedrockModel
 
-model = AnthropicModel(
-    client_args={
-        "api_key": os.getenv("api_key"),
-    },
-    # **model_config
-    max_tokens=1028,
-    model_id="claude-3-7-sonnet-20250219",
-    params={
-        "temperature": 0.3,
-    }
+# Claude Haiku 5.5 on Amazon Bedrock (cross-region inference profile).
+# Model lifecycle: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+model = BedrockModel(
+    model_id=os.getenv("BEDROCK_MODEL_ID", "global.anthropic.claude-haiku-5-5"),
+    region_name=os.getenv("AWS_REGION", "us-east-1"),
 )
 
 
@@ -41,7 +36,7 @@ def start_calculator_server():
     transport for communication.
     """
     # Create an MCP server with a descriptive name
-    mcp = FastMCP("Calculator Server")
+    mcp = MCPServer("Calculator Server")
 
     # Define a simple addition tool
     @mcp.tool(description="Add two numbers together")
@@ -105,8 +100,8 @@ def start_calculator_server():
         return x / y
 
     # Run the server with Streamable HTTP transport on the default port (8000)
-    print("Starting MCP Calculator Server on http://localhost:8000")
-    mcp.run(transport="streamable-http")
+    print("Starting MCP Calculator Server on http://127.0.0.1:8000/mcp")
+    mcp.run(transport="streamable-http", host="127.0.0.1", port=8000)
 
 
 def main():
@@ -125,10 +120,8 @@ def main():
     # Connect to the MCP server using Streamable HTTP transport
     print("Connecting to MCP server...")
 
-    def create_streamable_http_transport():
-        return streamablehttp_client("http://localhost:8000/mcp/")
-
-    streamable_http_mcp_client = MCPClient(create_streamable_http_transport)
+    # MCPClient builds the streamable HTTP transport when given a URL
+    streamable_http_mcp_client = MCPClient(url="http://127.0.0.1:8000/mcp")
 
     # Create a system prompt that explains the calculator capabilities
     system_prompt = """

@@ -15,14 +15,14 @@ from strands import tool
 def video_reader_local(
     video_path: str, 
     text_prompt: str = "Describe what you see in this video",
-    model_id: str = "us.amazon.nova-pro-v1:0",
+    model_id: str = "us.amazon.nova-2-lite-v1:0",
     region: Optional[str] = None,
     system_prompt: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Analyze video content using AWS Bedrock's multimodal capabilities.
     
-    This tool processes videos LOCALLY (no S3 upload required) and uses Nova/Claude 
+    This tool processes videos LOCALLY (no S3 upload required) and uses Amazon Nova 2 Lite (or other video-capable Bedrock) 
     models to analyze video content through Bedrock's Converse API. The video is sent
     directly as bytes in the API request.
     
@@ -47,8 +47,8 @@ def video_reader_local(
     Args:
         video_path: Path to local video file (must exist on filesystem)
         text_prompt: Question or instruction for analyzing the video
-        model_id: Bedrock model ID to use for analysis (default: us.amazon.nova-pro-v1:0)
-        region: AWS region for Bedrock client (default: from AWS_REGION env or us-west-2)
+        model_id: Bedrock model ID to use for analysis (default: us.amazon.nova-2-lite-v1:0)
+        region: AWS region for Bedrock client (default: from AWS_REGION env or us-east-1)
         system_prompt: Custom system prompt for analysis (optional)
         
     Returns:
@@ -73,7 +73,7 @@ def video_reader_local(
     try:
         # Get defaults from environment if not provided
         if not region:
-            region = os.getenv('AWS_REGION', 'us-west-2')
+            region = os.getenv("AWS_REGION", "us-east-1")
         
         if not system_prompt:
             system_prompt = "Always answer in the same language you are asked. Note: I can only analyze visual content, not audio."

@@ -10,9 +10,9 @@ This is a Python-based CDK (Cloud Development Kit) project that demonstrates how
 ## Prerequisites
 
 - [AWS CLI](https://aws.amazon.com/cli/) installed and configured
-- Python 3.8 or later
+- Python 3.10 or later (tested with 3.11); the Lambda functions run on Python 3.12 (arm64)
 - [jq](https://stedolan.github.io/jq/) (optional) for formatting JSON output
-- AWS account with Bedrock access
+- AWS account with Bedrock access to Claude Haiku 5.5 (`global.anthropic.claude-haiku-5-5`) and Amazon Nova 2 Lite (`us.amazon.nova-2-lite-v1:0`). The model is set in `my_agent_cdk/my_agent_cdk_stack.py` (`_model_id`) and passed to both functions as the `MODEL_ID` environment variable.
 
 ## Project Structure
 
@@ -76,7 +76,7 @@ aws lambda invoke --function-name AgentSFunction \
 ### Multi-Modal Processing Agent
 
 ```bash
-aws lambda invoke --function-name MultimodalSFunction \
+aws lambda invoke --function-name StrandsAgentMultimodalLambda \
       --region us-east-2 \
       --cli-binary-format raw-in-base64-out \
       --payload '{"prompt": "Analyze this image", "s3object": "s3://your-bucket/path/to/image.jpg"}' \
@@ -99,7 +99,7 @@ The Multi-Modal Processing Agent can handle various types of media:
 - **Documents**: PDF, CSV, DOCX, XLS, XLSX
 - **Videos**: MP4, MOV, AVI, MKV, WebM
 
-The agent uses custom tools built with the Strands Agent framework to process and analyze these media types.
+Images and documents are read with the SDK-vended `read` tool (`strands.vended_tools`), videos with the custom `video_reader` tool (Amazon Nova 2 Lite through the Bedrock Converse API, by S3 location). The weather agent uses the vended `http_request` tool. The Lambda layer only needs `strands-agents` (see `layers/lambda_requirements.txt`); `strands-agents-tools` is no longer required.
 
 ## Cleanup
 
@@ -114,4 +114,5 @@ cdk destroy
 - [AWS CDK Python Documentation](https://docs.aws.amazon.com/cdk/latest/guide/work-with-cdk-python.html)
 - [AWS Lambda Documentation](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
 - [AWS Bedrock Documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html)
-- [Strands Agent Framework Documentation](https://github.com/aws-samples/strands-framework)
+- [Strands Agents Documentation](https://strandsagents.com/)
+- [Amazon Bedrock model lifecycle](https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html)

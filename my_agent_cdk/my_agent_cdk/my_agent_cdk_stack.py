@@ -12,7 +12,9 @@ from constructs import Construct
 from lambdas.code.project_lambdas import Lambdas
 from s3_cloudfront import S3Deploy
 BucketKeyName = "my-1-strands-agents-"
-_model_id = "us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+# Claude Haiku 5.5 via the global cross-region inference profile (ACTIVE on Amazon Bedrock).
+# Lifecycle: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+_model_id = "global.anthropic.claude-haiku-5-5"
 BucketSampleContent = "image"
 
 
@@ -54,6 +56,7 @@ class MyAgentCdkStack(Stack):
         Fn.multimodal_function.add_environment("REGION_NAME", _region)
 
         Fn.multimodal_function.add_environment("MODEL_ID", _model_id)
+        Fn.weather_function.add_environment("MODEL_ID", _model_id)
         
 
 

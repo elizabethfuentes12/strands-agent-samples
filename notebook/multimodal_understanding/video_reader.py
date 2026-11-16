@@ -12,7 +12,7 @@ from strands import tool
 def video_reader(
     video_path: str, 
     text_prompt: str = "Describe what you see in this video",
-    model_id: str = "us.amazon.nova-pro-v1:0",
+    model_id: str = "us.amazon.nova-2-lite-v1:0",
     region: Optional[str] = None,
     s3_bucket: Optional[str] = None,
     system_prompt: Optional[str] = None
@@ -20,7 +20,7 @@ def video_reader(
     """
     Analyze video content using AWS Bedrock's multimodal capabilities.
     
-    This tool processes videos and uses Nova/Claude models to analyze video content 
+    This tool processes videos and uses Amazon Nova 2 Lite (or other video-capable Bedrock) models to analyze video content 
     through Bedrock's Converse API.
     
     IMPORTANT MODEL LIMITATIONS (Amazon Nova):
@@ -57,7 +57,7 @@ def video_reader(
     try:
         # Get defaults from environment if not provided
         if not region:
-            region = os.getenv('AWS_REGION', 'us-west-2')
+            region = os.getenv("AWS_REGION", "us-east-1")
         
         if not system_prompt:
             system_prompt = "Always answer in the same language you are asked. Note: I can only analyze visual content, not audio."

@@ -25,7 +25,7 @@ def create_lambda_package():
     script_dir = Path(__file__).parent
     packaging_dir = script_dir / "strands"
 
-    # get the path to the strands_tools package
+    # dependencies are installed into layers/strands/_dependencies by pip (see README)
     #app_dir = current_dir / "lambda"
     #app_deployment_zip = packaging_dir / "app.zip"
 
