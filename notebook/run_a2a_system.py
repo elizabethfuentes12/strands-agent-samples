@@ -43,12 +43,9 @@ def main():
     print("🚀 Simple A2A System Runner")
     print("=" * 40)
     
-    # Check API key
-    api_key = os.getenv("api_key")
-    if not api_key:
-        print("⚠️  Warning: 'api_key' environment variable is not set!")
-        print("Setting dummy key for infrastructure testing...")
-        os.environ["api_key"] = "dummy-key-for-testing"
+    # The agents use Amazon Bedrock (Claude Haiku 5.5 via the global inference profile),
+    # so AWS credentials must be available in the environment or the AWS CLI config.
+    print(f"☁  Bedrock region: {os.getenv('AWS_REGION', 'us-east-1')} | model: {os.getenv('BEDROCK_MODEL_ID', 'global.anthropic.claude-haiku-5-5')}")
     
     # Clean up ports
     print("🧹 Cleaning up ports...")

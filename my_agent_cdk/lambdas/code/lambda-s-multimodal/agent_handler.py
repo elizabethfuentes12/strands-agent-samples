@@ -9,7 +9,7 @@
 import boto3
 from strands.models import BedrockModel
 from strands import Agent
-from strands_tools import image_reader, file_read
+from strands.vended_tools import read  # images and documents (strands_tools image_reader/file_read were removed in 0.9.0)
 from video_reader import video_reader
 from strands.tools import tool
 import os
@@ -32,10 +32,9 @@ Analyze their contents and provide relevant information.
 
 You can:
 
-1. For PNG, JPEG/JPG, GIF, or WebP formats use image_reader to process file
-2. For PDF, csv, docx, xls or xlsx formats use file_read to process file  
-3. For MP4, MOV, AVI, MKV, WebM formats use video_reader to process file
-4. Just deliver the answer
+1. For PNG, JPEG/JPG, GIF, WebP, PDF, csv, docx, xls or xlsx formats use the `read` tool (absolute file_path)
+2. For MP4, MOV, AVI, MKV, WebM formats use `video_reader` to process the file (S3 URI)
+3. Just deliver the answer
 
 When displaying responses:
 - Format answers data in a human-readable way
@@ -92,7 +91,6 @@ def handler(event: Dict[str, Any], _context) -> str:
 
 
         bedrock_model = BedrockModel(
-            #model_id="us.anthropic.claude-3-7-sonnet-20250219-v1:0",
             model_id=model_id,
             boto_session=session,
             streaming=False
@@ -101,13 +99,14 @@ def handler(event: Dict[str, Any], _context) -> str:
         # Updated multimodal agent with video support
         multimodal_agent = Agent(
             system_prompt=MULTIMODAL_SYSTEM_PROMPT,
-            tools=[image_reader, file_read, video_reader],
+            tools=[read, video_reader],
             model=bedrock_model
         )
 
         result_agent = multimodal_agent(final_prompt)
         print(result_agent)
-        return str(result_agent.message['content'][0]['text'])
+        # Claude 4.6+ models can emit a reasoningContent block first, so collect only the text blocks
+        return "\n".join(block["text"] for block in result_agent.message["content"] if "text" in block)
     
     except Exception as e:
         import traceback

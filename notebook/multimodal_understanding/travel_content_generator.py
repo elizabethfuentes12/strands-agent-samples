@@ -4,6 +4,12 @@ Travel Content Generator Application
 
 Generate complete travel content packages (images, videos, and itineraries)
 using Amazon Bedrock and Strands Agents.
+
+Models used:
+- Claude Haiku 5.5 (agent reasoning), global cross-region inference profile
+- Stability AI Stable Image Core (images) and Luma AI Ray 2 (videos) in us-west-2,
+  through the custom tools in content_tools.py
+- The itinerary is written with the SDK-vended `write` tool
 """
 
 import os
@@ -11,7 +17,8 @@ import sys
 import boto3
 from strands import Agent
 from strands.models import BedrockModel
-from strands_tools import generate_image, file_write, nova_reels, use_aws
+from strands.vended_tools import write
+from content_tools import generate_image, generate_video, check_video_status, download_from_s3
 
 
 def get_user_input():
@@ -54,7 +61,7 @@ def get_user_input():
         season = "summer"
     
     # Get S3 bucket for video generation
-    print("\n📦 Video generation requires an S3 bucket (AWS Bedrock limitation)")
+    print("\n📦 Video generation requires an S3 bucket in us-west-2 (Bedrock async jobs write the MP4 to S3)")
     print("   Leave empty to skip video generation")
     bucket = input("   Enter S3 bucket name: ").strip()
     
@@ -77,80 +84,70 @@ def get_user_input():
 
 def create_content_agent(region):
     """Create the content generator agent."""
-    # Disable tool consent prompts for automation
-    os.environ['BYPASS_TOOL_CONSENT'] = 'true'
-    
-    # Create Bedrock model with session region
+    # Claude Haiku 5.5 through the global cross-region inference profile
     session = boto3.Session(region_name=region)
     model = BedrockModel(
-        model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0",
+        model_id=os.getenv("BEDROCK_MODEL_ID", "global.anthropic.claude-haiku-5-5"),
         boto_session=session
     )
-    
+
+    output_dir = os.path.abspath("output")
+
     # Create content generator agent
     agent = Agent(
         model=model,
         tools=[
             generate_image,
-            nova_reels,
-            use_aws,
-            file_write
+            generate_video,
+            check_video_status,
+            download_from_s3,
+            write
         ],
-        system_prompt="""You are a professional travel content creator that generates complete content packages.
+        system_prompt=f"""You are a professional travel content creator that generates complete content packages.
 
 Your tools:
-- generate_image: Create high-quality destination images with Amazon Nova Canvas (saves PNG locally)
-- nova_reels: Generate promotional videos with Amazon Nova Reel (saves to S3)
-- use_aws: Download files from S3 or perform other AWS operations
-- file_write: Create text files for itineraries
+- generate_image: Create high-quality destination images with Stability AI Stable Image Core on Amazon Bedrock (saves a PNG locally)
+- generate_video: Start a promotional video with Luma AI Ray 2 on Amazon Bedrock (saved to S3, asynchronous)
+- check_video_status: Poll the video job until it is Completed and get the S3 URI of the MP4
+- download_from_s3: Download the finished video from S3 to a local path
+- write: Create text files for itineraries (absolute paths)
+
+All files go in the output directory: {output_dir}
 
 When the user provides a destination, you MUST:
 
 1. **Generate Destination Image**:
-   - Use generate_image tool
+   - Use generate_image with output_path "{output_dir}/[destination]-[landmark].png" and aspect_ratio 16:9
    - Create a stunning photo of the main landmark at golden hour
-   - Include detailed prompt with: lighting, composition, atmosphere, mood
+   - Include a detailed prompt with: lighting, composition, atmosphere, mood
    - Professional travel photography quality
-   - The tool will save the PNG file automatically
 
-2. **Generate Tour Video** (if S3 bucket provided):
-   - First, use nova_reels tool with action="create"
-   - Create a 6-second cinematic tour
-   - CRITICAL: Text prompt MUST be under 512 characters
-   - Show 3-4 iconic locations with smooth camera movement
-   - Pass text, s3_bucket parameters
+2. **Generate Tour Video** (only if an S3 bucket is provided):
+   - Use generate_video with the s3_bucket provided, duration "5s", aspect_ratio 16:9
+   - Create a cinematic tour showing 2-3 iconic locations with smooth camera movement
+   - CRITICAL: the prompt MUST be short (under 300 tokens, roughly 2 sentences)
    - Save the invocation_arn from the response
-   - IMPORTANT: Video generation takes 5-10 minutes
-   - Keep checking status with nova_reels action="status" repeatedly
-   - Continue checking until status is "Completed" (not "InProgress")
-   - Only when status is "Completed", extract the S3 output URI from the response
-   - Parse the S3 URI to get bucket and key
-   - Then use use_aws to download the video:
-     * service_name: "s3"
-     * operation_name: "download_file"
-     * parameters: {"Bucket": bucket_name, "Key": video_key, "Filename": "output/[destination]-tour.mp4"}
-   - DO NOT attempt download until status is "Completed"
+   - Video generation takes 2-5 minutes: call check_video_status repeatedly until the status is "Completed"
+   - Only when it is "Completed", call download_from_s3 with the returned S3 URI and local_path "{output_dir}/[destination]-tour.mp4"
+   - DO NOT attempt the download before the status is "Completed"
 
 3. **Create Travel Itinerary**:
-   - Use file_write tool
-   - Generate detailed day-by-day itinerary as text
+   - Use the write tool with path "{output_dir}/[destination]-itinerary.txt"
+   - Generate a detailed day-by-day itinerary as text
    - Include: activities, restaurants, cultural insights, transportation tips
    - Match the travel style and season provided
-   - Save to output/[destination]-itinerary.txt
    - Format with clear sections: Day 1, Day 2, etc.
 
 Guidelines:
 - Be creative and professional
 - Use specific location names and landmarks
 - Include atmospheric details
-- Ensure video prompts are concise (under 512 chars)
-- For video generation, wait for completion before downloading
 - Generate ALL pieces of content automatically
 
 Always execute all available tools when given a destination.
 """
     )
-    
+
     return agent
 
 
@@ -207,9 +204,9 @@ Create {'image and itinerary' if skip_video else 'all three pieces of content (i
 Use the exact parameters provided above.
 
 For video generation:
-1. Use nova_reels to create the video (it will be saved to S3)
-2. IMPORTANT: Keep checking status repeatedly until it shows "Completed" (takes 5-10 minutes)
-3. Only after status is "Completed", use use_aws to download the video from S3 to output/
+1. Use generate_video to start the job (the MP4 will be saved to S3)
+2. IMPORTANT: Keep calling check_video_status until it shows "Completed" (takes 2-5 minutes)
+3. Only after status is "Completed", use download_from_s3 to save the video in output/
 4. Do NOT skip the waiting period - the video must be fully generated before download
 """
     

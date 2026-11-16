@@ -1,7 +1,7 @@
 # Multimodal AI with Strands Agents
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python 3.9+">
+  <img src="https://img.shields.io/badge/Python-3.10+-blue.svg" alt="Python 3.10+">
   <img src="https://img.shields.io/badge/AWS-Bedrock-orange.svg" alt="AWS Bedrock">
   <img src="https://img.shields.io/badge/Code-10--35_lines-green.svg" alt="10-35 lines">
 </p>
@@ -10,7 +10,7 @@ Build production-ready multimodal AI systems in **minutes, not hours**. Process 
 
 **Why Strands Agents?**
 
-✅ **Built-in tools** - `generate_image`, `generate_video`, `nova_reels`, `use_aws` ready to use  
+✅ **SDK vended tools** - `read`, `write`, `subagent` ready to use, plus small custom Bedrock tools (`video_reader`, `generate_image`, `generate_video`, `s3_vector_memory`)  
 ✅ **Minimal code** - Complete agents in 10-35 lines  
 ✅ **No boilerplate** - Focus on logic, not infrastructure  
 ✅ **AWS-native** - Seamless integration with Bedrock, S3, and more
@@ -19,7 +19,7 @@ Build production-ready multimodal AI systems in **minutes, not hours**. Process 
 
 ## 🚀 Quick Start
 
-**Prerequisites:** AWS account with [Amazon Bedrock](https://aws.amazon.com/bedrock/) access, Python 3.9+
+**Prerequisites:** AWS account with [Amazon Bedrock](https://aws.amazon.com/bedrock/) access, Python 3.10+ (tested with 3.11)
 
 ```bash
 # Install dependencies
@@ -38,12 +38,13 @@ aws configure
 ```python
 from strands import Agent
 from strands.models import BedrockModel
-from strands_tools import generate_image, generate_video, nova_reels
+from strands.vended_tools import write
+from content_tools import generate_image, generate_video  # custom tools in this folder (Bedrock InvokeModel / StartAsyncInvoke)
 
 # Create agent with built-in tools (no custom code needed!)
 agent = Agent(
-    model=BedrockModel(model_id="us.anthropic.claude-3-5-sonnet-20241022-v2:0"),
-    tools=[generate_image, generate_video, nova_reels]  # Ready to use!
+    model=BedrockModel(model_id="global.anthropic.claude-haiku-5-5"),
+    tools=[generate_image, generate_video, write]  # Ready to use!
 )
 
 # Generate content with a simple prompt
@@ -60,11 +61,11 @@ Six progressive tutorials from basic multimodal processing to production-ready A
 
 | Tutorial | Notebook | Built-in Tools | Code | What You Build | Key Learning |
 |----------|----------|----------------|------|----------------|--------------|
-| **01** | [Image & Document Analysis](01-multimodal-basic.ipynb) | `image_reader`, `file_read` | ~15 lines | Multimodal content processing | Claude Sonnet multimodal API |
-| **02** | [Video Analysis & MCP](02-multimodal-with-mcp.ipynb) | `video_reader`, MCP | ~20 lines | Video processing + external tools | Amazon Nova Pro, MCP integration |
-| **03** | [Local Memory with FAISS](03-multimodal-with-faiss.ipynb) | `mem0_memory` | ~25 lines | Vector storage & semantic search | Context retention, FAISS vectors |
+| **01** | [Image & Document Analysis](01-multimodal-basic.ipynb) | `read` (SDK vended) | ~15 lines | Multimodal content processing | Claude Haiku 5.5 multimodal input |
+| **02** | [Video Analysis & MCP](02-multimodal-with-mcp.ipynb) | `video_reader`, MCP | ~20 lines | Video processing + external tools | Amazon Nova 2 Lite, MCP integration |
+| **03** | [Local Long-Term Memory](03-multimodal-with-faiss.ipynb) | `MemoryManager`, `FileMemoryStore` | ~25 lines | Cross-session memory | Automatic extraction, `add_memory` / `search_memory` tools |
 | **04** | [Production Memory with S3](04-multimodal-with-s3-vectors.ipynb) | `s3_vector_memory` | ~25 lines | AWS-native vector storage | S3 Vectors, user isolation |
-| **05** | [AI Content Generation](05-travel-content-generator.ipynb) | `generate_image`, `nova_reels`, `use_aws`, `file_write` | ~30 lines | Generate images & videos | Nova Canvas, Nova Reel |
+| **05** | [AI Content Generation](05-travel-content-generator.ipynb) | `generate_image`, `generate_video`, `download_from_s3`, `write` | ~30 lines | Generate images & videos | Stability AI Stable Image Core, Luma AI Ray 2 (async) |
 | **06** | [Intelligent Travel Assistant](06-travel-assistant-demo.ipynb) | All tools combined | ~35 lines | Complete AI assistant | End-to-end multimodal system |
 
 ---
@@ -80,9 +81,10 @@ Six progressive tutorials from basic multimodal processing to production-ready A
 |------|---------|---------|
 | `video_reader.py` | Process videos with S3 upload | Chapters 2-6 |
 | `video_reader_local.py` | Process videos locally (no S3) | Chapters 2-6 |
-| `s3_memory.py` | AWS-native memory with S3 Vectors | Chapter 4 |
+| `s3_memory.py` | AWS-native memory with S3 Vectors | Chapters 4, 6 |
+| `content_tools.py` | Image (Stability AI) and video (Luma AI Ray 2) generation tools on Amazon Bedrock | Chapter 5 |
 | `travel_content_generator.py` | Standalone content generator app | Chapter 5 |
-| `requirements.txt` | Python dependencies | All chapters |
+| `../requirements.txt` | Python dependencies (pinned) | All chapters |
 
 ## Skills You'll Gain
 
@@ -92,7 +94,7 @@ Six progressive tutorials from basic multimodal processing to production-ready A
 - Build cross-modal intelligence
 
 **Memory Systems**
-- Implement vector storage (FAISS, S3 Vectors)
+- Implement long-term memory (`FileMemoryStore` locally, S3 Vectors in production)
 - Manage user-specific memory
 - Deploy production-ready memory
 
@@ -131,7 +133,7 @@ Six progressive tutorials from basic multimodal processing to production-ready A
 | [Amazon S3 Vectors](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html) | Vector storage | Pay per GB stored |
 | [Amazon S3](https://aws.amazon.com/s3/) | Media file storage | Pay per GB stored |
 
-**Cost optimization:** Use FAISS (Chapter 3) for development, S3 Vectors (Chapter 4) for production.
+**Cost optimization:** Use `FileMemoryStore` (Chapter 3) for development, S3 Vectors (Chapter 4) for production.
 
 ## Documentation
 
@@ -153,7 +155,7 @@ Six progressive tutorials from basic multimodal processing to production-ready A
 **Development Workflow**
 1. Start with Chapter 1 for fundamentals
 2. Add capabilities progressively
-3. Test locally with FAISS (Chapter 3)
+3. Test locally with `FileMemoryStore` (Chapter 3)
 4. Deploy to production with S3 Vectors (Chapter 4)
 
 **Memory Management**
@@ -175,7 +177,7 @@ Six progressive tutorials from basic multimodal processing to production-ready A
 | AWS credentials not found | Run `aws configure` |
 | Bedrock access denied | Enable models in Bedrock console |
 | Video generation fails | Verify S3 bucket exists and has permissions |
-| Memory not persisting | Check file permissions for FAISS index |
+| Memory not persisting | Check the `.strands/memory/` folder is writable (FileMemoryStore) or the S3 Vectors bucket/index names |
 
 **Need help?** Check the [Strands Agents documentation](https://strandsagents.com/) or open an issue.
 

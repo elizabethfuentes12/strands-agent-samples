@@ -1,5 +1,7 @@
+import os
 from strands import Agent
-from strands_tools import http_request
+from strands.models import BedrockModel
+from strands.vended_tools import http_request  # vended by the SDK (strands_tools.http_request was removed in 0.9.0)
 from typing import Dict, Any
 
 # Define a weather-focused system prompt
@@ -23,10 +25,15 @@ Always explain the weather conditions clearly and provide context for the foreca
 """
 
 def handler(event: Dict[str, Any], _context) -> str:
+    # MODEL_ID is set by the CDK stack (defaults to Claude Haiku 5.5, global inference profile)
+    model = BedrockModel(model_id=os.environ.get("MODEL_ID", "global.anthropic.claude-haiku-5-5"))
+
     weather_agent = Agent(
+        model=model,
         system_prompt=WEATHER_SYSTEM_PROMPT,
         tools=[http_request],
     )
 
     response = weather_agent(event.get('prompt'))
-    return str(response.message['content'][0]['text'])
+    # Claude 4.6+ models can emit a reasoningContent block first, so collect only the text blocks
+    return "\n".join(block["text"] for block in response.message["content"] if "text" in block)

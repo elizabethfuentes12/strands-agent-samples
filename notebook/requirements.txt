@@ -1,16 +1,24 @@
-boto3
-mcp-server-git
-strands-agents
-strands-agents-tools 
-strands-agents-builder
-strands-agents[anthropic]
-mcp[cli]
-strands-agents[a2a]
-fastapi
-strands-agents-tools[a2a_client]
-matplotlib
-langfuse
-ragas
-mem0ai
-opensearch-py
-faiss-cpu
+# Core (tested with Python 3.11)
+boto3==1.44.3
+strands-agents[anthropic,a2a,web-fetch]==1.65.0
+mcp[cli]==2.3.0
+
+# A2A sample (notebook 05 / strands-a2a-inter-agent)
+fastapi==0.163.1
+uvicorn==0.54.0
+
+# Multimodal notebooks
+pillow==13.0.0
+matplotlib==3.11.2
+
+# Notebook 06 (LangFuse observability + RAGAS evaluation)
+langfuse==5.2.0
+ragas==0.4.4
+langchain-core>=1.0,<2
+langchain-text-splitters>=1.0,<2
+langchain-aws==1.9.3
+langchain-chroma==1.1.0
+docx2txt==0.9
+
+# Optional: Mem0 as a MemoryStore for the Strands MemoryManager (see multimodal notebook 03)
+# mem0-strands==0.1.1

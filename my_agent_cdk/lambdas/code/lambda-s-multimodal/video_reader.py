@@ -8,7 +8,7 @@ from typing import Dict, Any, Optional
 def video_reader(
     video_path: str, 
     text_prompt: str = "Describe what you see in this video",
-    model_id: str = "us.amazon.nova-pro-v1:0",
+    model_id: str = "us.amazon.nova-2-lite-v1:0",
     region: Optional[str] = None,
     system_prompt: Optional[str] = None,
     agent = None
@@ -41,9 +41,9 @@ def video_reader(
             elif hasattr(agent.model, 'model_name'):
                 model_id = agent.model.model_name
             else:
-                model_id = "us.amazon.nova-pro-v1:0"  # Default fallback
+                model_id = "us.amazon.nova-2-lite-v1:0"  # Default fallback
         elif not model_id:
-            model_id = "us.amazon.nova-pro-v1:0"  # Default fallback
+            model_id = "us.amazon.nova-2-lite-v1:0"  # Default fallback
             
         # Always prioritize the environment variable for region
         if env_region:

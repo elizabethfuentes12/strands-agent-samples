@@ -1,8 +1,10 @@
-from mcp.server.fastmcp import FastMCP
+# MCP Python SDK 2.x: FastMCP was renamed to MCPServer.
+# Migration guide: https://py.sdk.modelcontextprotocol.io/v2/migration/
+from mcp.server.mcpserver import MCPServer
 
 from employee_data import SKILLS, EMPLOYEES
 
-mcp = FastMCP("employee-server", stateless_http=True, host="0.0.0.0", port=8002)
+mcp = MCPServer("employee-server")
 
 @mcp.tool()
 def get_skills() -> set[str]:
@@ -21,4 +23,6 @@ def get_employees_with_skill(skill: str) -> list[dict]:
     return employees_with_skill
 
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http")
+    # In SDK 2.x transport options (host, port, stateless_http) are passed to run(), not the constructor.
+    # Streamable HTTP endpoint: http://127.0.0.1:8002/mcp
+    mcp.run(transport="streamable-http", host="127.0.0.1", port=8002, stateless_http=True)
